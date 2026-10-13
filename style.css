@@ -243,6 +243,14 @@ table.score td {
 	text-align: center;
 }
 
+table.score:not(.gap-table) {
+	table-layout: fixed;
+}
+
+table.score td.place {
+	white-space: nowrap;
+}
+
 table.score thead th {
 	background: #141414;
 	position: sticky;
@@ -253,17 +261,46 @@ table.score .team-icon {
 	font-size: 22px;
 }
 
-table.score .team-diff-row td {
-	text-align: center;
-	font-size: 12px;
-	padding: 2px 0;
-	font-variant-numeric: tabular-nums;
-	font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+table.score tfoot button.edit-race {
+	background: none;
+	border: 0;
+	border-radius: 0;
+	padding: 0;
+	font-size: 16px;
+	line-height: 1;
 }
 
-table.score .team-diff--ahead { color: #4ade80; }
-table.score .team-diff--behind { color: #f87171; }
-table.score .team-diff--tied { color: #9aa0a6; }
+table.score .gap-value--ahead { color: #4ade80; }
+table.score .gap-value--behind { color: #f87171; }
+table.score .gap-value--tied { color: #9aa0a6; }
+
+.scoreboard-flex {
+	display: flex;
+	align-items: flex-start;
+}
+
+.scoreboard-flex > table.score:first-child {
+	flex: 1 1 auto;
+	width: 100%;
+}
+
+table.gap-table {
+	flex: 0 0 auto;
+	margin-left: -1px;
+}
+
+table.gap-table td,
+table.gap-table th {
+	font-variant-numeric: tabular-nums;
+	font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+	white-space: nowrap;
+}
+
+/* Keep border width/height identical to the main table (for row-height alignment)
+   but hide the line itself so gap values appear to float between rows. */
+table.gap-table tbody td {
+	border-color: transparent;
+}
 
 .positive { color: #4ade80; }
 .negative { color: #f87171; }
@@ -295,11 +332,11 @@ table.score .place-3 {
 	color: #b56b2c;
 }
 
-table.score tbody tr:nth-child(2n) {
+table.score:not(.gap-table) tbody tr:nth-child(2n) {
 	background: #33333320;
 }
 
-table.score tbody:not(.team-mode) tr:nth-child(n+7) td {
+table.score:not(.gap-table) tbody:not(.team-mode) tr:nth-child(n+7) td {
 	background: #80000020;
 }
 

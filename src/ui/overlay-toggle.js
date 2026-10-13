@@ -26,11 +26,42 @@ function makeDialog() {
 const configKey = 'useOverlay';
 const bridge = 'http://localhost:52323/events';
 
+// When leaving the page (e.g. "New session", refresh, tab close) tell the bridge to go back to
+// its idle state, so the OBS overlay doesn't keep showing the previous session's last scoreboard
+// while the homescreen is up and no new Mogi exists yet.
+window.addEventListener('beforeunload', () => {
+	if( Config.get(configKey) !== 'on' || !navigator.sendBeacon) return;
+	// text/plain avoids a CORS preflight (application/json isn't CORS-safelisted) — the bridge
+	// doesn't check the content-type anyway, and a beacon fired during unload has no time to
+	// spare for a round trip it might not survive.
+	navigator.sendBeacon(bridge, new Blob([JSON.stringify({ status: 'waiting' })], { type: 'text/plain' }));
+});
+
 /**
  * @param {HTMLInputElement} toggle
  * @param {Mogi} mogi
+ * @param {HTMLAnchorElement} [newSessionLink]
  */
-export function setupOverlay(toggle, mogi) {
+export function setupOverlay(toggle, mogi, newSessionLink) {
+	// Clicking "New session" reloads the page. The beforeunload beacon above is a
+	// best-effort fallback, but beacons fired during same-page navigation are
+	// unreliable — so clear the overlay explicitly here before navigating, using a
+	// keepalive fetch that survives the unload.
+	if( newSessionLink) {
+		let navigating = false;
+		newSessionLink.addEventListener('click', e => {
+			if( Config.get(configKey) !== 'on' || navigating) return;
+			e.preventDefault();
+			navigating = true;
+			let gone = false;
+			const go = () => { if( gone) return; gone = true; window.location.href = newSessionLink.href; };
+			fetch(bridge, { method: 'POST', body: JSON.stringify({ status: 'waiting' }), keepalive: true })
+				.then(go, go);
+			// Fallback so a hung/absent bridge never blocks starting a new session.
+			setTimeout(go, 500);
+		});
+	}
+
 	const sendData = () => new Promise((res,rej) => {
 		fetch(bridge, {method:"POST", body:JSON.stringify(mogi.export())})
 			.then(r => {
