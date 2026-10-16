@@ -336,7 +336,7 @@ table.score:not(.gap-table) tbody tr:nth-child(2n) {
 	background: #33333320;
 }
 
-table.score:not(.gap-table) tbody:not(.team-mode) tr:nth-child(n+7) td {
+table.score tbody:not(.team-mode) tr.bottom-half td {
 	background: #80000020;
 }
 

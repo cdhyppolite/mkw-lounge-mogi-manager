@@ -38,7 +38,7 @@ function makeDialog() {
 function createGridHost(container) {
 	const grid = document.createElement('div');
 	grid.classList.add('grid');
-	grid.style.gridTemplateColumns = '1fr 1fr 160px';
+	grid.style.gridTemplateColumns = '1fr 40px 1fr 160px';
 	container.append(grid);
 	return grid;
 }
@@ -50,6 +50,7 @@ function createGridHost(container) {
 function createTeamRow(grid, team) {
 	const name = document.createElement('b');
 	name.textContent = t('editRoster.team', { id: team.seed });
+	const copyNameButton = document.createElement('b');
 	const tag = document.createElement('input');
 	tag.name = 'tag';
 	tag.autocomplete = "off";
@@ -65,7 +66,7 @@ function createTeamRow(grid, team) {
 		colour.add(opt);
 	}
 	colour.dataset.previousValue = colour.value = String(team.index);
-	grid.append(name, tag, colour);
+	grid.append(name, copyNameButton, tag, colour);
 }
 
 /**
@@ -74,11 +75,12 @@ function createTeamRow(grid, team) {
 function createHeaderRow(grid) {
 	const name = document.createElement('b');
 	name.textContent = t('editRoster.loungeName');
+	const copyNameButton = document.createElement('b');
 	const ingame = document.createElement('b');
 	ingame.textContent = t('editRoster.ingameName');
 	const sub = document.createElement('b');
 	sub.textContent = t('editRoster.substitute');
-	grid.append(name, ingame, sub);
+	grid.append(name, copyNameButton, ingame, sub);
 }
 
 /**
@@ -100,6 +102,8 @@ function createPlayerRow(grid, player, editableName) {
 		name = document.createElement('div');
 		name.textContent = player.name;
 	}
+	const copyNameButton = document.createElement('button');
+	copyNameButton.textContent = '→'
 
 	const input = document.createElement('input');
 	input.name = 'ign';
@@ -107,6 +111,11 @@ function createPlayerRow(grid, player, editableName) {
 	input.dataset.playerId = player.id;
 	input.placeholder = t('editRoster.autodetect');
 	input.value = player.rawIgn;
+
+	copyNameButton.addEventListener('click', (e) => {
+		e.preventDefault();
+    	input.value = player.name.slice(0, 10);
+	});
 
 	const subcontainer = document.createElement('div');
 	const sub = player.substitutes.at(-1);
@@ -121,7 +130,7 @@ function createPlayerRow(grid, player, editableName) {
 	subbutton.textContent = t('editRoster.editSubButton');
 	subcontainer.append(subname, ' ', subbutton);
 
-	grid.append(name, input, subcontainer);
+	grid.append(name, copyNameButton, input, subcontainer);
 }
 
 /**
