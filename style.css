@@ -270,6 +270,10 @@ table.score tfoot button.edit-race {
 	line-height: 1;
 }
 
+tfoot tr td:nth-child(15) {
+    white-space: nowrap;
+}
+
 table.score .gap-value--ahead { color: #4ade80; }
 table.score .gap-value--behind { color: #f87171; }
 table.score .gap-value--tied { color: #9aa0a6; }
@@ -703,3 +707,4 @@ textarea {
 	bottom: 1rem;
 	z-index: 1000;
 }
+
