@@ -39,7 +39,7 @@ export default {
 			],
 			aboutLabel: "À propos",
 			about: [
-				"Créé par [Niet](https://github.com/PFQNiet) ; contributeurs : TechyAlex",
+				"Créé par [Niet](https://github.com/PFQNiet) ; contributeurs : [TechyAlex](https://github.com/techyalex), [Mio Xenoblade](https://github.com/mio-xenoblade)",
 				"[Voir le code source sur GitHub](https://github.com/PFQNiet/mkw-lounge-tracker)",
 				"[Signaler un bug](https://github.com/PFQNiet/mkw-lounge-tracker/issues)"
 			]

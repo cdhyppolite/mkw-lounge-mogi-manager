@@ -34,7 +34,7 @@ export default {
 			],
 			aboutLabel: '情報',
 			about: [
-				'作成: [Niet](https://github.com/PFQNiet)、協力者: TechyAlex',
+				'作成: [Niet](https://github.com/PFQNiet)、協力者: [TechyAlex](https://github.com/techyalex)、[Mio Xenoblade](https://github.com/mio-xenoblade)',
 				'[ソースコードを見る](https://github.com/PFQNiet/mkw-lounge-tracker)',
 				'[不具合を報告](https://github.com/PFQNiet/mkw-lounge-tracker/issues)'
 			]
