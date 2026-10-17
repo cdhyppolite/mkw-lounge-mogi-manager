@@ -4,6 +4,9 @@
 export function isDebugMode() {
 	return new URLSearchParams(window.location.search).get('debug') === '1';
 }
+export function isGame8dx() {
+	return new URLSearchParams(window.location.search).get('8dx') === '1';
+}
 
 /**
  * Popcount for 32-bit masks

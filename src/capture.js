@@ -4,7 +4,7 @@ import { t } from "./i18n/i18n.js";
 import { OCR_GRID, processResultsScreen } from "./ocr.js";
 import { Race } from "./race.js";
 import { error, info } from "./ui/toast.js";
-import { ctx2d, rgb2hsv } from "./util.js";
+import { ctx2d, isGame8dx, rgb2hsv } from "./util.js";
 
 /**
  * Capture a single frame from a video element into a canvas.
@@ -108,9 +108,12 @@ export async function captureResultsScreen(video, mogi) {
 			mogi.addRace(totalResults)
 		}
 		else {
+			// Choose results rectangles depending of the game (12p or 8dx)
+			const gameModeResultsRects = isGame8dx() ? OCR_GRID.nameRects8dx : OCR_GRID.nameRectsTop12;
+
 			const base = captureFrame(video);
 			// this may throw MANUAL_CANCELLED or NO_SCOREBOARD
-			const placements = await processResultsScreen(base, OCR_GRID.nameRectsTop12, mogi.roster, teamsEnabled);
+			const placements = await processResultsScreen(base, gameModeResultsRects, mogi.roster, teamsEnabled);
 			// Only if successful, make the snapshot and push the race
 			const snapshotUrlTop12 = await snapshotBlobUrlFromCanvas(base);
 			const race = new Race(Date.now(), placements, snapshotUrlTop12);
@@ -151,8 +154,16 @@ export async function captureResultsScreen(video, mogi) {
 export async function capturePauseScreen(video, mogi) {
 	try {
 		const base = captureFrame(video);
+
+		//Choose pause rectangles depending of the game (12p, 24p, or 8dx).
+		let gameModePauseRects;
+		if (isGame8dx()) 
+			gameModePauseRects = OCR_GRID.pauseRects8dx;
+		else
+			gameModePauseRects = mogi.roster.is24p ? OCR_GRID.pauseRects24p : OCR_GRID.pauseRects12p;
+		
 		// this may throw MANUAL_CANCELLED or NO_SCOREBOARD
-		const placements = await processResultsScreen(base, mogi.roster.is24p ? OCR_GRID.pauseRects24p : OCR_GRID.pauseRects12p, mogi.roster);
+		const placements = await processResultsScreen(base, gameModePauseRects, mogi.roster);
 		return placements;
 	} catch (e) {
 		// If the user canceled manual resolve, just abort quietly
