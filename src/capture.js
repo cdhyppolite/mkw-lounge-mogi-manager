@@ -41,13 +41,15 @@ export function preprocessCrop(src, r, scale=1, scratch=document.createElement('
 
 	const img = pctx.getImageData(0, 0, scratch.width, scratch.height);
 	const [hue] = rgb2hsv(img.data[0], img.data[1], img.data[2]);
-	const lowerThreshold = useHueBasedThreshold ? (
-		hue < 25 ? 70 : // red team
-		hue < 50 ? 120 : // yellow team
-		hue < 200 ? 80 : // green team
-		hue < 300 ? 50 : // blue team
-		70 // red team again
-	) : 0;
+	const lowerThreshold = isGame8dx()
+		? 128 //use 128 for 8dx or the mkworld team color is team enable
+		: (useHueBasedThreshold ? (
+			hue < 25 ? 70 : // red team
+			hue < 50 ? 120 : // yellow team
+			hue < 200 ? 80 : // green team
+			hue < 300 ? 50 : // blue team
+			70 // red team again
+		) : 0);
 	const upperThreshold = 240; // aggressive threshold for white
 	let whitePixels = 0;
 	for (let i = 0; i < img.data.length; i += 4) {
@@ -57,6 +59,24 @@ export function preprocessCrop(src, r, scale=1, scratch=document.createElement('
 		img.data[i] = img.data[i + 1] = img.data[i + 2] = v;
 		if (v === 255) whitePixels++;
 	}
+
+	// for 8dx if the crop area is too white, invert the colors and recompute the white ratio before OCR.
+	if (isGame8dx() && whitePixels / (scratch.width * scratch.height) >= 0.8) {
+		// Invert colors (Similar to Ctrl+I in Photoshop).
+		for (let i = 0; i < img.data.length; i += 4) {
+			img.data[i] = 255 - img.data[i];
+			img.data[i + 1] = 255 - img.data[i + 1];
+			img.data[i + 2] = 255 - img.data[i + 2];
+		}
+		whitePixels = 0;
+		for (let i = 0; i < img.data.length; i += 4) {
+			// Recount only fully white pixels after inversion.
+			const r0 = img.data[i] ?? 0, g0 = img.data[i + 1] ?? 0, b0 = img.data[i + 2] ?? 0;
+			if (r0 === 255 && g0 === 255 && b0 === 255) whitePixels++;
+		}
+	}
+
+	// Final white ratio is taken from the post-inversion crop so OCR can judge the image correctly.
 	const whiteRatio = whitePixels / (scratch.width * scratch.height);
 	pctx.putImageData(img, 0, 0);
 	return { canvas: scratch, whiteRatio };
@@ -88,7 +108,7 @@ let temp24PlayerResults = null;
  */
 export async function captureResultsScreen(video, mogi) {
 	try {
-		const teamsEnabled = mogi.playersPerTeam >= mogi.roster.size / 4;
+		const teamsEnabled = (mogi.playersPerTeam >= mogi.roster.size / 4) && !isGame8dx();
 		if (temp24PlayerResults !== null) {
 			// Capture the second half of a 24p race
 			const base = captureFrame(video);
