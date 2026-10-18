@@ -11,7 +11,13 @@
 	<header class="row">
 		<h1 style="font-size: 18px; font-weight: 600; margin:0" data-i18n="title">MKW Mogi Manager</h1>
 		<ins class="spacer"></ins>
-		<a href="/?8dx=1&debug=1">8dx</a>
+		<!-- Game mode selector -->
+		<select id="gameMode" aria-label="Select game mode">
+			<option value="vs">VS</option>
+			<option value="ko" disabled>KO</option>
+			<option value="8dx">8dx</option>
+		</select>
+		<!-- language selector -->
 		<select id="locale" aria-label="Select locale">
 			<option value="en">English</option>
 			<option value="fr">Français</option>

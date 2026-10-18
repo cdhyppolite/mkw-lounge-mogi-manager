@@ -280,7 +280,7 @@ const scratch = document.createElement('canvas');
  */
 export async function processResultsScreen(canvas, nameRects, roster, teamMode=false, excludeIds=new Set()) {
 	const dbg = isDebugMode() ? startNewDebugReport() : null;
-	const whitelist = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 -',
+	const whitelist = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 -#★☆♪→←↑↓',
 		levCosts = { ins: 3, del: 1, sub: 2 },
 		maxEditDistance = 10;
 	if( dbg ) {

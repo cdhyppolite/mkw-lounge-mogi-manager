@@ -4,8 +4,17 @@
 export function isDebugMode() {
 	return new URLSearchParams(window.location.search).get('debug') === '1';
 }
+
+export function getGameMode() {
+	const params = new URLSearchParams(window.location.search);
+	if (params.get('game') === 'ko') return 'ko';
+	if (params.get('game') === '8dx') return '8dx';
+	if (params.get('8dx') === '1') return '8dx';
+	return 'vs';
+}
+
 export function isGame8dx() {
-	return new URLSearchParams(window.location.search).get('8dx') === '1';
+	return getGameMode() === '8dx';
 }
 
 /**

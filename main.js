@@ -4,6 +4,7 @@ import { setupAutoCapture } from "./src/ui/autocapture-toggle.js";
 import { setupCameraList, setupCaptureButton } from "./src/ui/capture-button.js";
 import { connectExportButton } from "./src/ui/export-results-dialog.js";
 import { connectGallery } from "./src/ui/gallery.js";
+import { setupGameModeSwitcher } from "./src/ui/game-mode-switcher.js";
 import { setupLocaleSwitcher } from "./src/ui/locale-switcher.js";
 import { setupDebugOcrButton } from "./src/ui/ocr-debug-dialog.js";
 import { setupOverlay } from "./src/ui/overlay-toggle.js";
@@ -16,8 +17,10 @@ async function main() {
 	const step2 = /** @type {HTMLDivElement} */(document.getElementById('step2'));
 
 	const localeSelect = /** @type {HTMLSelectElement} */(document.getElementById('locale'));
+	const gameModeSelect = /** @type {HTMLSelectElement} */(document.getElementById('gameMode'));
 
 	setupLocaleSwitcher(localeSelect);
+	setupGameModeSwitcher(gameModeSelect);
 	initI18n();
 
 	const startButton = /** @type {HTMLButtonElement} */(document.getElementById('start'));
