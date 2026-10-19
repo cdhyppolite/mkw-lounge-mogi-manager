@@ -33,7 +33,7 @@ export function captureFrame(videoEl, canvas=document.createElement('canvas')) {
  * @param {HTMLCanvasElement} [scratch]
  * @param {boolean} [useHueBasedThreshold] Use hue to determine threshold
  */
-export function preprocessCrop(src, r, scale=1, scratch=document.createElement('canvas'), useHueBasedThreshold=false) {
+export function preprocessCrop(src, r, scale=1, scratch=document.createElement('canvas'), useHueBasedThreshold=false, is8dxResults=false) {
 	scratch.width = r.w * scale; scratch.height = r.h * scale;
 	const pctx = ctx2d(scratch, { willReadFrequently: true });
 	pctx.imageSmoothingEnabled = false;
@@ -41,8 +41,10 @@ export function preprocessCrop(src, r, scale=1, scratch=document.createElement('
 
 	const img = pctx.getImageData(0, 0, scratch.width, scratch.height);
 	const [hue] = rgb2hsv(img.data[0], img.data[1], img.data[2]);
-	const lowerThreshold = isGame8dx()
-		? 128 //use 128 for 8dx or the mkworld team color is team enable
+	const lowerThreshold = is8dxResults
+		? 192 //Value for 8dx
+
+		//or the mkworld team color is team enable
 		: (useHueBasedThreshold ? (
 			hue < 25 ? 70 : // red team
 			hue < 50 ? 120 : // yellow team
@@ -60,8 +62,8 @@ export function preprocessCrop(src, r, scale=1, scratch=document.createElement('
 		if (v === 255) whitePixels++;
 	}
 
-	// for 8dx if the crop area is too white, invert the colors and recompute the white ratio before OCR.
-	if (isGame8dx() && whitePixels / (scratch.width * scratch.height) >= 0.8) {
+	// for 8dx if the crop area is too white, invert the colors and redo the white ratio before OCR.
+	if (is8dxResults && whitePixels / (scratch.width * scratch.height) >= 0.58) {
 		// Invert colors (Similar to Ctrl+I in Photoshop).
 		for (let i = 0; i < img.data.length; i += 4) {
 			img.data[i] = 255 - img.data[i];

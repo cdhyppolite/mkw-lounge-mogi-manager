@@ -3,7 +3,7 @@ import { preprocessCrop, snapshotBlobUrlFromCanvas } from './capture.js';
 import { normalizeName } from './player.js';
 import { Placement } from './race.js';
 import { manualResolve } from './ui/manual-resolution-dialog.js';
-import { isDebugMode, popcount } from './util.js';
+import { isDebugMode, isGame8dx, popcount } from './util.js';
 
 /** @typedef {import("./roster.js").Roster} Roster */
 /**
@@ -115,7 +115,7 @@ export const OCR_GRID = {
 		...generateRowRects({count: 12, startY: 35, rowHeight: 47, vGap: 29, x: 260, w: 255}),
 		...generateRowRects({count: 12, startY: 35, rowHeight: 47, vGap: 29, x: 670, w: 255}),
 	],
-	nameRects8dx: generateRowRects({count: 12, startY: 90, rowHeight: 47, vGap: 31, x: 1015, w: 300}),
+	nameRects8dx: generateRowRects({count: 12, startY: 90, rowHeight: 47, vGap: 31, x: 1015, w: 330}),
 	
 	pauseRects8dx: [
 		...generateRowRects({count: 6, startY: 103, rowHeight: 38, vGap: 94, x: 192, w: 290}),
@@ -262,7 +262,7 @@ const scratch = document.createElement('canvas');
  */
 export async function processResultsScreen(canvas, nameRects, roster, teamMode=false, excludeIds=new Set()) {
 	const dbg = isDebugMode() ? startNewDebugReport() : null;
-	const whitelist = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 -#★☆♪→←↑↓',
+	const whitelist = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 -#★☆♪→←↑↓?',
 		levCosts = { ins: 3, del: 1, sub: 2 },
 		maxEditDistance = 10;
 	if( dbg ) {
@@ -288,7 +288,7 @@ export async function processResultsScreen(canvas, nameRects, roster, teamMode=f
 	const rawRows = [];
 	for ( let idx = 0; idx < nameRects.length; idx++ ) {
 		const rect = nameRects[idx];
-		const { canvas: img, whiteRatio } = preprocessCrop(canvas, rect, 1, scratch, teamMode);
+		const { canvas: img, whiteRatio } = preprocessCrop(canvas, rect, 1, scratch, teamMode, isGame8dx());
 		if (whiteRatio < 0.01 || whiteRatio > 0.3) {
 			// nothing found, skip
 			rawRows.push({ text: '', confidence: 0 });
