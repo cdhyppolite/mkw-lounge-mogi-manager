@@ -103,17 +103,17 @@ function generateRowRects(p) {
 
 /**
  * Build row rectangles from simple parameters (for 8dx pause)
- * @param {{count:number,startY:number,h:number,vGap:number,x:number,w:number}} p
+ * @param {{count:number,startY:number,rowHeight:number,vGap:number,x:number,w:number}} p
  * @returns {Rect[]}
  */
-function generatePauseRects8dx(p) {
+function generate8dxRects(p) {
 	const rects = [];
 	for (let i = 0; i < p.count; i++) {
 		rects.push({
 			x: p.x,
-			y: Math.round(p.startY + i * (p.h + p.vGap)),
+			y: Math.round(p.startY + i * (p.rowHeight + p.vGap)),
 			w: p.w,
-			h: p.h
+			h: p.rowHeight
 		});
 	}
 
@@ -133,11 +133,11 @@ export const OCR_GRID = {
 		...generateRowRects({ count: 12, startY: 15, rowHeight: 76, vPad: 15, x: 260, w: 240 }),
 		...generateRowRects({ count: 12, startY: 15, rowHeight: 76, vPad: 15, x: 670, w: 240 }),
 	],
-	nameRects8dx: generateRowRects({count: 12, startY: 78, rowHeight: 77, vPad: 8, x: 1011, w: 336 }),
+	nameRects8dx: generateRowRects({count: 12, startY: 90, rowHeight: 47, vPad: 31, x: 1015, w: 300 }),
 	
 	pauseRects8dx: [
-		...generatePauseRects8dx({ count: 6, startY: 103, h: 38, vGap: 94, x: 192, w: 325 }),
-		...generatePauseRects8dx({ count: 6, startY: 103, h: 38, vGap: 94, x: 1058, w: 325 }),
+		...generate8dxRects({ count: 6, startY: 103, rowHeight: 38, vGap: 94, x: 192, w: 290 }),
+		...generate8dxRects({ count: 6, startY: 103, rowHeight: 38, vGap: 94, x: 1058, w: 290 }),
 	],
 };
 
