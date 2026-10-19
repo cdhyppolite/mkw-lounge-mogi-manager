@@ -48,6 +48,9 @@ export function setupOverlay(toggle, mogi, newSessionLink) {
 	// unreliable — so clear the overlay explicitly here before navigating, using a
 	// keepalive fetch that survives the unload.
 	if( newSessionLink) {
+		const currentUrl = new URL(window.location.href);
+		newSessionLink.href = `${currentUrl.pathname}${currentUrl.search}${currentUrl.hash}`;
+
 		let navigating = false;
 		newSessionLink.addEventListener('click', e => {
 			if( Config.get(configKey) !== 'on' || navigating) return;
