@@ -85,28 +85,10 @@ function startNewDebugReport() {
 
 /**
  * Build row rectangles from simple parameters
- * @param {{count:number,startY:number,rowHeight:number,vPad:number,x:number,w:number}} p
- * @returns {Rect[]}
- */
-function generateRowRects(p) {
-	const rects = [];
-	for (let i = 0; i < p.count; i++) {
-		rects.push({
-			x: p.x,
-			y: Math.round(p.startY + i * p.rowHeight) + p.vPad,
-			w: p.w,
-			h: p.rowHeight - 2 * p.vPad
-		});
-	}
-	return rects;
-}
-
-/**
- * Build row rectangles from simple parameters (for 8dx pause)
  * @param {{count:number,startY:number,rowHeight:number,vGap:number,x:number,w:number}} p
  * @returns {Rect[]}
  */
-function generate8dxRects(p) {
+function generateRowRects(p) {
 	const rects = [];
 	for (let i = 0; i < p.count; i++) {
 		rects.push({
@@ -123,21 +105,21 @@ function generate8dxRects(p) {
 export const OCR_GRID = {
 	canvasWidth: 1920,
 	canvasHeight: 1080,
-	nameRectsTop12: generateRowRects({ count: 12, startY: 40, rowHeight: 77, vPad: 15, x: 1270, w: 340 }),
-	nameRectsBottom12: generateRowRects({ count: 12, startY: 117, rowHeight: 77, vPad: 15, x: 1270, w: 340 }),
+	nameRectsTop12: generateRowRects({count: 12, startY: 57, rowHeight: 47, vGap: 30, x: 1270, w: 340}),
+	nameRectsBottom12: generateRowRects({count: 12, startY: 132, rowHeight: 47, vGap: 30, x: 1270, w: 340}),
 	pauseRects12p: [
-		...generateRowRects({ count: 6, startY: 15, rowHeight: 76, vPad: 15, x: 260, w: 240 }),
-		...generateRowRects({ count: 6, startY: 15, rowHeight: 76, vPad: 15, x: 670, w: 240 }),
+		...generateRowRects({count: 6, startY: 35, rowHeight: 47, vGap: 29, x: 260, w: 255}),
+		...generateRowRects({count: 6, startY: 35, rowHeight: 47, vGap: 29, x: 670, w: 255}),
 	],
 	pauseRects24p: [
-		...generateRowRects({ count: 12, startY: 15, rowHeight: 76, vPad: 15, x: 260, w: 240 }),
-		...generateRowRects({ count: 12, startY: 15, rowHeight: 76, vPad: 15, x: 670, w: 240 }),
+		...generateRowRects({count: 12, startY: 35, rowHeight: 47, vGap: 29, x: 260, w: 255}),
+		...generateRowRects({count: 12, startY: 35, rowHeight: 47, vGap: 29, x: 670, w: 255}),
 	],
-	nameRects8dx: generateRowRects({count: 12, startY: 90, rowHeight: 47, vPad: 31, x: 1015, w: 300 }),
+	nameRects8dx: generateRowRects({count: 12, startY: 90, rowHeight: 47, vGap: 31, x: 1015, w: 300}),
 	
 	pauseRects8dx: [
-		...generate8dxRects({ count: 6, startY: 103, rowHeight: 38, vGap: 94, x: 192, w: 290 }),
-		...generate8dxRects({ count: 6, startY: 103, rowHeight: 38, vGap: 94, x: 1058, w: 290 }),
+		...generateRowRects({count: 6, startY: 103, rowHeight: 38, vGap: 94, x: 192, w: 290}),
+		...generateRowRects({count: 6, startY: 103, rowHeight: 38, vGap: 94, x: 1058, w: 290}),
 	],
 };
 
