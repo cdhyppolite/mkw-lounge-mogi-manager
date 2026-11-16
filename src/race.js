@@ -1,3 +1,5 @@
+import { getGameMode } from './util.js';
+
 export const POINTS_BY_PLACEMENT_12P = [15,12,10,9,8,7,6,5,4,3,2,1];
 export const POINTS_BY_PLACEMENT_24P = [15,12,10,9,9,8,8,7,7,6,6,6,5,5,5,4,4,4,3,3,3,2,2,1];
 export const POINTS_BY_PLACEMENT_KO_TOUR_SQ = [30,26,23,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1];
@@ -61,6 +63,7 @@ export class Placement {
 
 	get score() {
 		if (this.#dc) return 1;
+		if (getGameMode() === 'ko') return POINTS_BY_PLACEMENT_KO_TOUR_SQ[this.#placement - 1] ?? 0;
 		if (this.is24p) return POINTS_BY_PLACEMENT_24P[this.#placement - 1] ?? 0;
 		return POINTS_BY_PLACEMENT_12P[this.#placement - 1] ?? 0;
 	}

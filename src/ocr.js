@@ -121,6 +121,10 @@ export const OCR_GRID = {
 		...generateRowRects({count: 6, startY: 103, rowHeight: 38, vGap: 94, x: 192, w: 290}),
 		...generateRowRects({count: 6, startY: 103, rowHeight: 38, vGap: 94, x: 1058, w: 290}),
 	],
+	nameRectsKo: [
+		...generateRowRects({count: 12, startY: 218, rowHeight: 42, vGap: 22, x: 179, w: 255}),
+		...generateRowRects({count: 12, startY: 218, rowHeight: 42, vGap: 22, x: 700, w: 255}),
+	],
 };
 
 /**

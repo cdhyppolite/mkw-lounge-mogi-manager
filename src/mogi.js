@@ -1,10 +1,11 @@
 import { Roster } from './roster.js';
-import { Placement, POINTS_BY_PLACEMENT_12P, POINTS_BY_PLACEMENT_24P, Race } from './race.js';
+import { Placement, POINTS_BY_PLACEMENT_12P, POINTS_BY_PLACEMENT_24P, POINTS_BY_PLACEMENT_KO_TOUR_SQ, Race } from './race.js';
 import { info, success } from './ui/toast.js';
 import { onLocaleChange, t } from './i18n/i18n.js';
 import { Team } from './team.js';
+import { getGameMode } from './util.js';
 
-export const RACE_COUNT = 12;
+export const RACE_COUNT = getGameMode() === 'ko' ? 5 : 12;
 
 export class Mogi extends EventTarget {
 	/** @type {Roster} */ #roster;
@@ -16,7 +17,9 @@ export class Mogi extends EventTarget {
 	get size() { return this.#races.length; }
 	get ended() { return this.#races.length >= RACE_COUNT; }
 	get maxScore() { 
-		const points = this.#roster.is24p ? POINTS_BY_PLACEMENT_24P : POINTS_BY_PLACEMENT_12P; 
+		const points = getGameMode() === 'ko'
+			? POINTS_BY_PLACEMENT_KO_TOUR_SQ
+			: this.#roster.is24p ? POINTS_BY_PLACEMENT_24P : POINTS_BY_PLACEMENT_12P;
 		return points.reduce((a, b) => a + b) * RACE_COUNT;
 	}
 
