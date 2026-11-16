@@ -2,7 +2,7 @@
 
 import { t } from "../i18n/i18n.js";
 import { RACE_COUNT } from "../mogi.js";
-import { ctx2d, toLetter } from "../util.js";
+import { ctx2d, getGameMode, toLetter } from "../util.js";
 import { openEditRace } from "./edit-race-dialog.js";
 import { openEditRoster } from "./edit-roster-dialog.js";
 import { success } from "./toast.js";
@@ -58,7 +58,7 @@ export function connectScoreboard(scoreTable, gapTable, video, mogi) {
 		}
 		colgroup.appendChild(document.createElement('col')); // Player: flexible
 		for (let i = 0; i < RACE_COUNT; i++) {
-			const colRace = document.createElement('col'); colRace.style.width = '34px'; colgroup.appendChild(colRace);
+			const colRace = document.createElement('col'); colRace.style.width = getGameMode() === 'ko' ? '105px' : '34px'; colgroup.appendChild(colRace);
 		}
 		const colTotal = document.createElement('col'); colTotal.style.width = '60px'; colgroup.appendChild(colTotal);
 		if (mogi.playersPerTeam > 1) {

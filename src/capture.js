@@ -4,7 +4,7 @@ import { t } from "./i18n/i18n.js";
 import { OCR_GRID, processResultsScreen } from "./ocr.js";
 import { Race } from "./race.js";
 import { error, info } from "./ui/toast.js";
-import { ctx2d, isGame8dx, rgb2hsv } from "./util.js";
+import { ctx2d, getGameMode, isGame8dx, rgb2hsv } from "./util.js";
 
 /**
  * Capture a single frame from a video element into a canvas.
@@ -111,6 +111,7 @@ let temp24PlayerResults = null;
 export async function captureResultsScreen(video, mogi) {
 	try {
 		const teamsEnabled = (mogi.playersPerTeam >= mogi.roster.size / 4) && !isGame8dx();
+		const isKo = getGameMode() === 'ko';
 		if (temp24PlayerResults !== null) {
 			// Capture the second half of a 24p race
 			const base = captureFrame(video);
@@ -130,8 +131,10 @@ export async function captureResultsScreen(video, mogi) {
 			mogi.addRace(totalResults)
 		}
 		else {
-			// Choose results rectangles depending of the game (12p or 8dx)
-			const gameModeResultsRects = isGame8dx() ? OCR_GRID.nameRects8dx : OCR_GRID.nameRectsTop12;
+			// KO without teams shows all players at once; KO team mode uses the 12+12 flow.
+			const gameModeResultsRects = isKo && !teamsEnabled
+				? OCR_GRID.nameRectsKo
+				: isGame8dx() ? OCR_GRID.nameRects8dx : OCR_GRID.nameRectsTop12;
 
 			const base = captureFrame(video);
 			// this may throw MANUAL_CANCELLED or NO_SCOREBOARD
@@ -139,7 +142,7 @@ export async function captureResultsScreen(video, mogi) {
 			// Only if successful, make the snapshot and push the race
 			const snapshotUrlTop12 = await snapshotBlobUrlFromCanvas(base);
 			const race = new Race(Date.now(), placements, snapshotUrlTop12);
-			if (mogi.roster.is24p) {
+			if (mogi.roster.is24p && (!isKo || teamsEnabled)) {
 				temp24PlayerResults = race;
 				//TODO: add translations
 				info(t('capture.capturedHalf'))
