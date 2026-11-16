@@ -34,6 +34,15 @@ button,
 	text-decoration: none;
 	cursor: pointer;
 }
+.gm_vs {
+	color: #ba68c8;
+}
+.gm_ko {
+	color: #e91e63;
+}
+.gm_8dx {
+	color: #00bcd4;
+}
 
 button[disabled] {
 	opacity: .6;

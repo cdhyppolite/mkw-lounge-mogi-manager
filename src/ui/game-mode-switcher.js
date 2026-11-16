@@ -1,29 +1,35 @@
+import { Config, getGameMode } from "../util.js";
+
 /**
- * Update the game mode selector to match the current URL.
+ * Update the game mode selector to match the saved game mode.
  * @param {HTMLSelectElement} gameModeSelect
  */
 export function setupGameModeSwitcher(gameModeSelect) {
-	const syncFromUrl = () => {
-		const params = new URLSearchParams(window.location.search);
-		const rawMode = params.get('game');
-		const mode = rawMode === 'ko' ? 'ko' : rawMode === '8dx' ? '8dx' : 'vs';
-		gameModeSelect.value = mode;
+	for (const option of gameModeSelect.options) {
+		if (option.disabled) {
+			option.classList.remove(`gm_${option.value}`);
+		}
+	}
+
+	/** @param {string} mode */
+	const updateModeClass = (mode) => {
+		gameModeSelect.classList.remove('gm_vs', 'gm_ko', 'gm_8dx');
+		if (!gameModeSelect.selectedOptions[0]?.disabled) {
+			gameModeSelect.classList.add(`gm_${mode}`);
+		}
 	};
 
-	syncFromUrl();
+	const syncFromStorage = () => {
+		const mode = getGameMode();
+		gameModeSelect.value = mode;
+		updateModeClass(mode);
+	};
+
+	syncFromStorage();
 
 	gameModeSelect.addEventListener('change', () => {
-		const params = new URLSearchParams(window.location.search);
 		const mode = gameModeSelect.value;
-
-		if (mode === 'vs') {
-			params.delete('game');
-		}
-		else {
-			params.set('game', mode);
-		}
-
-		const nextUrl = `${window.location.pathname}${params.toString() ? `?${params.toString()}` : ''}`;
-		window.location.assign(nextUrl);
+		Config.set('gameMode', mode);
+		updateModeClass(mode);
 	});
 }

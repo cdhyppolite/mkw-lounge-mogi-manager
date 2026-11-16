@@ -6,11 +6,8 @@ export function isDebugMode() {
 }
 
 export function getGameMode() {
-	const params = new URLSearchParams(window.location.search);
-	if (params.get('game') === 'ko') return 'ko';
-	if (params.get('game') === '8dx') return '8dx';
-	if (params.get('8dx') === '1') return '8dx';
-	return 'vs';
+	const mode = Config.get('gameMode', 'vs');
+	return mode === 'ko' || mode === '8dx' ? mode : 'vs';
 }
 
 export function isGame8dx() {

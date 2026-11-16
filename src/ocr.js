@@ -115,7 +115,7 @@ export const OCR_GRID = {
 		...generateRowRects({count: 12, startY: 35, rowHeight: 47, vGap: 29, x: 260, w: 255}),
 		...generateRowRects({count: 12, startY: 35, rowHeight: 47, vGap: 29, x: 670, w: 255}),
 	],
-	nameRects8dx: generateRowRects({count: 12, startY: 90, rowHeight: 47, vGap: 31, x: 1015, w: 330}),
+	nameRects8dx: generateRowRects({count: 12, startY: 90, rowHeight: 47, vGap: 31, x: 1015, w: 330}), //use x = 1075 for offline test with cpu
 	
 	pauseRects8dx: [
 		...generateRowRects({count: 6, startY: 103, rowHeight: 38, vGap: 94, x: 192, w: 290}),
