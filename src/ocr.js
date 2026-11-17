@@ -262,9 +262,10 @@ const scratch = document.createElement('canvas');
  * @param {Rect[]} nameRects
  * @param {Roster} roster
  * @param {boolean} teamMode
+ * @param {number} placementDisplayOffset
  * @returns {Promise<Placement[]>}
  */
-export async function processResultsScreen(canvas, nameRects, roster, teamMode=false, excludeIds=new Set()) {
+export async function processResultsScreen(canvas, nameRects, roster, teamMode=false, excludeIds=new Set(), placementDisplayOffset=0) {
 	const dbg = isDebugMode() ? startNewDebugReport() : null;
 	const whitelist = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 -#★☆♪→←↑↓?',
 		levCosts = { ins: 3, del: 1, sub: 2 },
@@ -433,7 +434,7 @@ export async function processResultsScreen(canvas, nameRects, roster, teamMode=f
 			placements[missingIndex] = placements[missingIndex].withPlayerIdAndResolvedName(remaining[0].id, remaining[0].activePlayer.name);
 		}
 		else {
-			const confirmed = await manualResolve(placements, remaining);
+			const confirmed = await manualResolve(placements, remaining, placementDisplayOffset);
 			if (!confirmed) {
 				if( dbg ) dbg.outcome = 'manual_cancelled';
 				const err = new Error('Manual resolve canceled');

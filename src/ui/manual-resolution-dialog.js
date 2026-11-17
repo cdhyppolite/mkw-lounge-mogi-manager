@@ -26,9 +26,10 @@ function makeDialog() {
 /**
  * @param {Placement[]} placements
  * @param {Player[]} remaining
+ * @param {number} placementDisplayOffset
  * @returns {Promise<boolean>} true = confirmed/applied, false = canceled
  */
-export function manualResolve(placements, remaining) {
+export function manualResolve(placements, remaining, placementDisplayOffset=0) {
 	return new Promise((resolve) => {
 		const { dialog, grid, cancel, confirm } = makeDialog();
 		grid.innerHTML = '';
@@ -36,7 +37,7 @@ export function manualResolve(placements, remaining) {
 		const unresolved = placements.filter(p => !p.playerId);
 
 		for (const row of unresolved) {
-			const y1 = document.createElement('div'); y1.className = 'mono muted'; y1.textContent = fmt.place(row.placement);
+			const y1 = document.createElement('div'); y1.className = 'mono muted'; y1.textContent = fmt.place(row.placement + placementDisplayOffset);
 			const y2 = document.createElement('div'); y2.textContent = t('capture.ocrResult', { ocrText: row.ocrText, ocrConfidence: row.ocrConfidence });
 			const y3 = document.createElement('div');
 			const sel = document.createElement('select'); sel.dataset.placement = String(row.placement);

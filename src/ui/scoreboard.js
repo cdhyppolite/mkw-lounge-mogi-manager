@@ -58,7 +58,7 @@ export function connectScoreboard(scoreTable, gapTable, video, mogi) {
 		}
 		colgroup.appendChild(document.createElement('col')); // Player: flexible
 		for (let i = 0; i < RACE_COUNT; i++) {
-			const colRace = document.createElement('col'); colRace.style.width = getGameMode() === 'ko' ? '105px' : '34px'; colgroup.appendChild(colRace);
+			const colRace = document.createElement('col'); colRace.style.width = getGameMode() === 'ko' ? '85px' : '34px'; colgroup.appendChild(colRace);
 		}
 		const colTotal = document.createElement('col'); colTotal.style.width = '60px'; colgroup.appendChild(colTotal);
 		if (mogi.playersPerTeam > 1) {

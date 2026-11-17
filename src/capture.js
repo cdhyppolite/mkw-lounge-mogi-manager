@@ -117,7 +117,7 @@ export async function captureResultsScreen(video, mogi) {
 			const base = captureFrame(video);
 			// this may throw MANUAL_CANCELLED or NO_SCOREBOARD
 			const excludedIds = new Set(temp24PlayerResults.placements.map(p => p.playerId));
-			const placements = await processResultsScreen(base, OCR_GRID.nameRectsBottom12, mogi.roster, teamsEnabled, excludedIds);
+			const placements = await processResultsScreen(base, OCR_GRID.nameRectsBottom12, mogi.roster, teamsEnabled, excludedIds, 12);
 			const combinedPlacements = [
 				...temp24PlayerResults.placements,
 				...placements.map(place => place.withPlacement(place.placement + 12, place.dc))
@@ -131,7 +131,7 @@ export async function captureResultsScreen(video, mogi) {
 			mogi.addRace(totalResults)
 		}
 		else {
-			// KO without teams shows all players at once; KO team mode uses the 12+12 flow.
+			// KO without teams shows all players at once; KO team mode take two captures Top 12 & Bottom 12.
 			const gameModeResultsRects = isKo && !teamsEnabled
 				? OCR_GRID.nameRectsKo
 				: isGame8dx() ? OCR_GRID.nameRects8dx : OCR_GRID.nameRectsTop12;

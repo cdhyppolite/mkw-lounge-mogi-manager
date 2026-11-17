@@ -279,7 +279,7 @@ table.score tfoot button.edit-race {
 	line-height: 1;
 }
 
-tfoot tr td:nth-child(15) {
+tfoot tr td:last-child {
     white-space: nowrap;
 }
 
