@@ -1,7 +1,7 @@
 /** @typedef {import("../mogi.js").Mogi} Mogi */
 
 import { t } from "../i18n/i18n.js";
-import { RACE_COUNT } from "../mogi.js";
+import { getRaceCount } from "../mogi.js";
 import { ctx2d, getGameMode, toLetter } from "../util.js";
 import { openEditRace } from "./edit-race-dialog.js";
 import { openEditRoster } from "./edit-roster-dialog.js";
@@ -15,6 +15,7 @@ import { success } from "./toast.js";
  */
 export function connectScoreboard(scoreTable, gapTable, video, mogi) {
 	mogi.addEventListener('update', () => {
+		const raceCount = getRaceCount();
 		const roster = [...mogi.roster];
 		const totals = mogi.calculatePlayerScores();
 		/** @type {Map<number, number>} */
@@ -57,7 +58,7 @@ export function connectScoreboard(scoreTable, gapTable, video, mogi) {
 			const colTeam = document.createElement('col'); colTeam.style.width = '64px'; colgroup.appendChild(colTeam);
 		}
 		colgroup.appendChild(document.createElement('col')); // Player: flexible
-		for (let i = 0; i < RACE_COUNT; i++) {
+		for (let i = 0; i < raceCount; i++) {
 			const colRace = document.createElement('col'); colRace.style.width = getGameMode() === 'ko' ? '85px' : '34px'; colgroup.appendChild(colRace);
 		}
 		const colTotal = document.createElement('col'); colTotal.style.width = '60px'; colgroup.appendChild(colTotal);
@@ -73,7 +74,7 @@ export function connectScoreboard(scoreTable, gapTable, video, mogi) {
 			const hTeam = document.createElement('th'); hTeam.textContent = t('scoreboard.team'); hr.appendChild(hTeam);
 		}
 		const hPlayer = document.createElement('th'); hPlayer.textContent = t('scoreboard.player'); hr.appendChild(hPlayer);
-		for (let i = 0; i < RACE_COUNT; i++) {
+		for (let i = 0; i < raceCount; i++) {
 			const th = document.createElement('th'); th.textContent = t('scoreboard.raceNumber', { number: i + 1 }); hr.appendChild(th);
 		}
 		const hTot = document.createElement('th'); hTot.textContent = t('scoreboard.total'); hr.appendChild(hTot);
@@ -167,8 +168,8 @@ export function connectScoreboard(scoreTable, gapTable, video, mogi) {
 			const tdName = document.createElement('td');
 			tdName.classList.add('player', `rank-${playerRank}`);
 			tdName.append(p.activePlayer.name);
-			if (races.length > 0 && races.length < RACE_COUNT) {
-				const pace = Math.round(playerScore * RACE_COUNT / races.length);
+			if (races.length > 0 && races.length < raceCount) {
+				const pace = Math.round(playerScore * raceCount / races.length);
 				const paceEl = document.createElement('span');
 				paceEl.className = 'race-delta muted';
 				paceEl.textContent = ` →${pace}`;
@@ -186,7 +187,7 @@ export function connectScoreboard(scoreTable, gapTable, video, mogi) {
 				td.textContent = placement ? String(placement).padStart(2, ' ') : t('blank');
 				tr.appendChild(td);
 			}
-			for (let i = races.length; i < RACE_COUNT; i++) {
+			for (let i = races.length; i < raceCount; i++) {
 				const td = document.createElement('td');
 				td.classList.add('muted', `rank-${playerRank}`);
 				td.textContent = t('blank');
@@ -225,7 +226,7 @@ export function connectScoreboard(scoreTable, gapTable, video, mogi) {
 			fEditRoster.colSpan = 2;
 		}
 		fr.appendChild(fEditRoster);
-		for (let i = 0; i < RACE_COUNT; i++) {
+		for (let i = 0; i < raceCount; i++) {
 			const td = document.createElement('td');
 			const btn = document.createElement('button');
 			btn.classList.add('edit-race');

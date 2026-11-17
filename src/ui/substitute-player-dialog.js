@@ -2,7 +2,7 @@
 /** @typedef {import("../player.js").Player} Player */
 
 import { t } from "../i18n/i18n.js";
-import { RACE_COUNT } from "../mogi.js";
+import { getRaceCount } from "../mogi.js";
 import { Substitute } from "../player.js";
 import { openEditRoster } from "./edit-roster-dialog.js";
 import { success } from "./toast.js";
@@ -38,6 +38,7 @@ function makeDialog() {
  */
 export function openSubstitutePlayer(mogi, player) {
 	const { dialog, name, grid, save, cancel } = makeDialog();
+	const raceCount = getRaceCount();
 
 	name.textContent = player.name;
 	const subs = player.substitutes;
@@ -56,9 +57,9 @@ export function openSubstitutePlayer(mogi, player) {
 		joinedAt.name = 'joinedAt';
 		joinedAt.type = 'number';
 		joinedAt.min = '1';
-		joinedAt.max = String(RACE_COUNT);
+		joinedAt.max = String(raceCount);
 		joinedAt.dataset.playerId = s.id;
-		joinedAt.placeholder = `1-${RACE_COUNT}`;
+		joinedAt.placeholder = `1-${raceCount}`;
 		joinedAt.value = String(s.joinedAt + 1);
 
 		grid.append(loungeName, ingameName, joinedAt);
@@ -76,8 +77,8 @@ export function openSubstitutePlayer(mogi, player) {
 		joinedAt.name = 'joinedAt';
 		joinedAt.type = 'number';
 		joinedAt.min = '1';
-		joinedAt.max = String(RACE_COUNT);
-		joinedAt.placeholder = `1-${RACE_COUNT}`;
+		joinedAt.max = String(raceCount);
+		joinedAt.placeholder = `1-${raceCount}`;
 		joinedAt.value = String(mogi.size + 1);
 
 		grid.append(loungeName, ingameName, joinedAt);

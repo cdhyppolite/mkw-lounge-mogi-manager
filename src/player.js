@@ -2,7 +2,7 @@
  * @typedef {import("./team.js").Team} Team
  */
 
-import { RACE_COUNT } from "./mogi.js";
+import { getRaceCount } from "./mogi.js";
 
 /**
  * @param {string & {normalized?:never}} s
@@ -63,7 +63,7 @@ export class Player {
 		if( p.joinedAt === 0) return p.name; // played all races, gets credit according to 6.d.i.
 		if( pos <= rosterSize/2) {
 			// winning position
-			return RACE_COUNT - p.joinedAt >= 4 ? p.name : this.name; // must play 4 or more races to get credit according to 6.d.iii.
+			return getRaceCount() - p.joinedAt >= 4 ? p.name : this.name; // must play 4 or more races to get credit according to 6.d.iii.
 			// TODO: Seek clarification on Rule 6.e. on how to report scores for players who did not play 4 or more races
 		}
 		// losing position

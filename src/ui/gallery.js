@@ -1,7 +1,7 @@
 /** @typedef {import("../mogi.js").Mogi} Mogi */
 
 import { fmt, t } from "../i18n/i18n.js";
-import { RACE_COUNT } from "../mogi.js";
+import { getRaceCount } from "../mogi.js";
 
 /**
  * @param {HTMLDivElement} raceGallery
@@ -11,7 +11,7 @@ export function connectGallery(raceGallery, mogi) {
 	mogi.addEventListener('update', () => {
 		raceGallery.innerHTML = '';
 		const races = mogi.races;
-		for( let i=0; i<RACE_COUNT; i++) {
+		for( let i=0; i<getRaceCount(); i++) {
 			const race = i < races.length ? races[i] : null;
 			const a = document.createElement('a');
 			if( race) {
