@@ -10,7 +10,7 @@ import { setupDebugOcrButton } from "./src/ui/ocr-debug-dialog.js";
 import { setupOverlay } from "./src/ui/overlay-toggle.js";
 import { connectScoreboard, connectScoreboardScreenshotter } from "./src/ui/scoreboard.js";
 import { requestRoster } from "./src/ui/set-roster-dialog.js";
-import { isDebugMode } from "./src/util.js";
+import { getGameMode, isDebugMode } from "./src/util.js";
 
 async function main() {
 	const step1 = /** @type {HTMLDivElement} */(document.getElementById('step1'));
@@ -34,6 +34,12 @@ async function main() {
 	const scoreTable = /** @type {HTMLTableElement} */(document.getElementById('scoreTable'));
 	const gapTable = /** @type {HTMLTableElement} */(document.getElementById('gapTable'));
 	const raceGallery = /** @type {HTMLDivElement} */(document.getElementById('raceGallery'));
+	const updateRaceGalleryColumns = () => {
+		const minWidth = getGameMode() === 'ko' ? 190 : 160;
+		raceGallery.style.gridTemplateColumns = `repeat(auto-fill, minmax(${minWidth}px, 1fr))`;
+	};
+	updateRaceGalleryColumns();
+	gameModeSelect.addEventListener('change', updateRaceGalleryColumns);
 	const snapshotButton = /** @type {HTMLButtonElement} */(document.getElementById('snapshotScores'));
 	const exportBtn = /** @type {HTMLButtonElement} */(document.getElementById('exportScores'));
 	const downloadBtn = /** @type {HTMLButtonElement} */(document.getElementById('downloadMogi'));
