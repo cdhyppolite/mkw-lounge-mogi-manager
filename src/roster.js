@@ -5,6 +5,13 @@ import { normalizeName, Player } from "./player.js";
 
 export const MAX_ROSTER_SIZE = 24;
 
+/** @param {string} mode */
+export function getAllowedRosterSizes(mode) {
+	if (mode === '8dx') return [MAX_ROSTER_SIZE / 2];
+	if (mode === 'ko') return [MAX_ROSTER_SIZE];
+	return [MAX_ROSTER_SIZE / 2, MAX_ROSTER_SIZE];
+}
+
 export class Roster {
 	/** @type {string} */
 	#tier;

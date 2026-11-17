@@ -20,7 +20,7 @@ async function main() {
 	const gameModeSelect = /** @type {HTMLSelectElement} */(document.getElementById('gameMode'));
 
 	setupLocaleSwitcher(localeSelect);
-	setupGameModeSwitcher(gameModeSelect);
+	const lockGameModeToRosterSize = setupGameModeSwitcher(gameModeSelect);
 	initI18n();
 
 	const startButton = /** @type {HTMLButtonElement} */(document.getElementById('start'));
@@ -46,6 +46,7 @@ async function main() {
 	const newSessionLink = /** @type {HTMLAnchorElement} */(document.getElementById('newSession'));
 
 	const roster = await requestRoster(startButton);
+	lockGameModeToRosterSize(roster.size);
 
 	step1.style.display = 'none';
 	step2.style.display = 'block';
