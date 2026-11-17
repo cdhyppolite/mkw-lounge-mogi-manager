@@ -46,9 +46,17 @@ export function manualResolve(placements, remaining, placementDisplayOffset=0) {
 			y3.appendChild(sel);
 			grid.append(y1, y2, y3);
 		}
+		const selects = [...grid.querySelectorAll('select')];
+		const syncDisabledOptions = () => {
+			for (const select of selects) {
+				for (const option of select.options) {
+					option.disabled = Boolean(option.value) && selects.some(other => other !== select && other.value === option.value);
+				}
+			}
+		};
+		for (const select of selects) select.addEventListener('change', syncDisabledOptions);
 
 		confirm.addEventListener('click', () => {
-			const selects = [...grid.querySelectorAll('select')];
 			const chosen = selects.map(s => s.value).filter(Boolean);
 
 			// Require all unresolved rows to be chosen and choices to be unique
