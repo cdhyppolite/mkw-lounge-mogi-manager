@@ -39,7 +39,6 @@ async function main() {
 		raceGallery.style.gridTemplateColumns = `repeat(auto-fill, minmax(${minWidth}px, 1fr))`;
 	};
 	updateRaceGalleryColumns();
-	gameModeSelect.addEventListener('change', updateRaceGalleryColumns);
 	const snapshotButton = /** @type {HTMLButtonElement} */(document.getElementById('snapshotScores'));
 	const exportBtn = /** @type {HTMLButtonElement} */(document.getElementById('exportScores'));
 	const downloadBtn = /** @type {HTMLButtonElement} */(document.getElementById('downloadMogi'));
@@ -60,6 +59,13 @@ async function main() {
 	connectScoreboardScreenshotter(snapshotButton, scoreTable, gapTable);
 	connectExportButton(exportBtn, downloadBtn, mogi);
 	connectGallery(raceGallery, mogi);
+	gameModeSelect.addEventListener('change', () => {
+		updateRaceGalleryColumns();
+		mogi.triggerUpdate();
+	});
+	mogi.addEventListener('update', () => {
+		if (mogi.races.length > 0) lockGameModeToRosterSize(roster.size, true);
+	});
 
 	if( isDebugMode() ) setupDebugOcrButton();
 }

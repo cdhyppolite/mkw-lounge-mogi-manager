@@ -4,7 +4,7 @@ import { getAllowedRosterSizes } from "../roster.js";
 /**
  * Update the game mode selector to match the saved game mode.
  * @param {HTMLSelectElement} gameModeSelect
- * @returns {(rosterSize: number) => void}
+ * @returns {(rosterSize: number, lockToCurrentMode?: boolean) => void}
  */
 export function setupGameModeSwitcher(gameModeSelect) {
 	for (const option of gameModeSelect.options) {
@@ -35,9 +35,11 @@ export function setupGameModeSwitcher(gameModeSelect) {
 		updateModeClass(mode);
 	});
 
-	return rosterSize => {
+	return (rosterSize, lockToCurrentMode = false) => {
 		for (const option of gameModeSelect.options) {
-			option.disabled = !getAllowedRosterSizes(option.value).includes(rosterSize);
+			option.disabled = lockToCurrentMode
+				? option.value !== getGameMode()
+				: !getAllowedRosterSizes(option.value).includes(rosterSize);
 			option.classList.toggle(`gm_${option.value}`, !option.disabled);
 		}
 		updateModeClass(gameModeSelect.value);
